@@ -418,7 +418,7 @@ Rectangle {
 
                         property string userIcon: {
                             if (typeof userModel !== "undefined" && userModel.count > 0) {
-                                var icon = userModel.data(userModel.index(container.userIndex, 0), Qt.UserRole + 3);
+                                var icon = userModel.data(userModel.index(container.userIndex, 0), Qt.UserRole + 4);
                                 return (icon && icon !== "") ? icon : "assets/avatar.jpg";
                             }
                             return "assets/avatar.jpg";
