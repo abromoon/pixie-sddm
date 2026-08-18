@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name=""/>
+
+  <group name="General">
+    <entry name="use24HourClock" type="Bool">
+      <label>If true, the clock uses the 24-hour format.</label>
+      <default>true</default>
+    </entry>
+    <entry name="showMediaControls" type="Bool">
+      <label>If true, shows any currently playing media along with controls to pause it.</label>
+      <default>true</default>
+    </entry>
+    <entry name="accentColor" type="Color">
+      <label>Accent color used for the clock and highlights.</label>
+      <default>#A9C78F</default>
+    </entry>
+    <entry name="backgroundColor" type="Color">
+      <label>Base background color for the login card.</label>
+      <default>#1A1C18</default>
+    </entry>
+    <entry name="textColor" type="Color">
+      <label>Primary text color.</label>
+      <default>#E3E3DC</default>
+    </entry>
+  </group>
+
+</kcfg>
