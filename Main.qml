@@ -37,6 +37,61 @@ Rectangle {
         return s.charAt(0).toUpperCase() + s.slice(1);
     }
 
+    function kdeWallpaperForUsers() {
+        if (typeof userModel === "undefined" || userModel.count <= 0) return "";
+        var order = [];
+        var li = userModel.lastIndex;
+        if (li >= 0 && li < userModel.count) order.push(li);
+        for (var i = 0; i < userModel.count; i++) {
+            if (order.indexOf(i) === -1) order.push(i);
+        }
+        for (var j = 0; j < order.length; j++) {
+            var hd = userModel.data(userModel.index(order[j], 0), Qt.UserRole + 3);
+            if (!hd) continue;
+            var wall = container.kdeWallpaper(hd.toString());
+            if (wall) return wall;
+        }
+        return "";
+    }
+
+    function readFileText(path) {
+        try {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "file://" + path, false);
+            xhr.send();
+            return xhr.responseText ? xhr.responseText : "";
+        } catch (e) {
+            return "";
+        }
+    }
+
+    function kdeWallpaper(homeDir) {
+        if (!homeDir) return "";
+        var text = readFileText(homeDir + "/.config/plasma-org.kde.plasma.desktop-appletsrc");
+        if (!text) return "";
+        var lines = text.split(/\r?\n/);
+        var inWallpaper = false;
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            if (/^\[Containments\]\[[0-9]+\]\[Wallpaper\]/.test(line)) {
+                inWallpaper = line.indexOf("org.kde.image") !== -1;
+            } else if (/^\[/.test(line)) {
+                inWallpaper = false;
+            } else if (inWallpaper && line.indexOf("Image=") === 0) {
+                var img = line.substring(6).trim();
+                if (img) return img;
+            }
+        }
+        return "";
+    }
+
+    property string backgroundSource: {
+        var wall = container.kdeWallpaperForUsers();
+        var resolved = wall ? wall : config.background;
+        console.log("Pixie SDDM: background resolved to [" + resolved + "]");
+        return resolved;
+    }
+
     function doLogin() {
         if (!loginState.visible || isLoggingIn) return;
 
@@ -218,6 +273,8 @@ Rectangle {
             if (backgroundImage.status === Image.Ready) {
                 colorExtractor.processed = false;
                 colorDelay.start();
+            } else if (backgroundImage.status === Image.Error && backgroundImage.source.toString() !== config.background) {
+                backgroundImage.source = config.background;
             }
         }
     }
@@ -229,7 +286,7 @@ Rectangle {
 
     Image {
         id: backgroundImage
-        source: config.background
+        source: container.backgroundSource
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
     }
@@ -309,7 +366,7 @@ Rectangle {
         Clock {
             id: mainClock
             anchors.centerIn: parent
-            backgroundSource: config.background
+            backgroundSource: container.backgroundSource
             baseAccent: container.extractedAccent
             fontFamily: fontRegular.name
             opacity: container.uiReady ? 1 : 0
