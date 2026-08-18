@@ -69,7 +69,10 @@ fi
 
 echo -e "${BLUE}==>${NC} Installing Pixie (Qt${SYSTEM_QT}) to ${THEME_DIR}..."
 mkdir -p "${THEME_DIR}"
-cp -r assets components Main.qml metadata.desktop theme.conf LICENSE "${THEME_DIR}/"
+cp -r src/* "${THEME_DIR}/"
+cp LICENSE "${THEME_DIR}/"
+mkdir -p "${THEME_DIR}/assets/fonts"
+cp vendor/fonts/FlexRounded-*.ttf vendor/fonts/MaterialDesignIcons.ttf "${THEME_DIR}/assets/fonts/"
 chmod -R 755 "${THEME_DIR}"
 
 # Restore user configurations if they were backed up

@@ -1,0 +1,9 @@
+# QtCreator
+.qtc_clangd/
+pixie.creator
+pixie.creator.user
+pixie.files
+pixie.config
+pixie.cflags
+pixie.cxxflags
+pixie.includes
